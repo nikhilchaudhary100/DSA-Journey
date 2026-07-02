@@ -1,0 +1,49 @@
+Approach 1: Brute Force (Using Extra Space)
+/* 
+Time Complexity: O(N), we can move all zeroes to end in linear time.
+Space Complexity: O(N), additional space used for temporary array.
+
+The Core Logic: The only reason brute force works here is because sequentially pulling non-zeroes inherently preserves their relative order, while the default zero values automatically fill the remaining trailing spaces.
+*/
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        // Create a vector to store non-zero numbers
+        vector<int> arr(nums.size(), 0);
+        int index = 0;
+
+        // Adding non-zero to arr
+        for(int i=0; i<nums.size(); i++){
+            if(nums[i]!=0){
+                arr[index]= nums[i];
+                index++;
+            }
+        }
+
+        // Copy back the arr to nums
+        nums=arr;
+    }
+};
+
+Approach 2: Optimal Approach (Two Pointer Approach)
+/*
+Time Complexity: O(N), we can move all zeroes to end in linear time.
+Space Complexity: O(1), constant additional space is used.
+
+The Core Logic: One pointer (the fast one) acts as a scout, checking every single element. The other pointer (the slow one) acts as a strict boundary for the "non-zero zone". Every time the scout finds a non-zero, it tosses it behind the boundary, and the boundary expands by one. The zeroes are naturally pushed to the end as a byproduct of this swapping process.
+*/
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        // slow pointer (boundary)
+        int insertPos = 0; 
+
+        // 'i' is the fast pointer (scout)
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] != 0) {
+                swap(nums[insertPos], nums[i]);
+                insertPos++;
+            }
+        }
+    }
+};
