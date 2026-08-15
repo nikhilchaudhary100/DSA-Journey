@@ -1,0 +1,49 @@
+/*
+Chore Logic: 
+1) The Comparison (while (i >= 0 && j >= 0)):
+We ask: "Which is bigger, nums1[i] or nums2[j]?"
+Whichever number is larger gets placed directly into the empty slot at nums1[k].
+Because k is pointing to empty space, absolutely nothing gets overwritten or shifted. It's perfectly safe.
+Once a number is placed, we step that pointer back (i-- or j--) and step our empty slot pointer back (k--).
+
+2) The Leftovers (while (j >= 0)):
+What happens if we run out of numbers in nums1 first? nums2 might still have smaller numbers left over.
+Since all the large numbers are out of the way, we simply copy the remaining nums2 numbers into the remaining front slots of nums1.
+The Missing Step (Why don't we copy leftovers from nums1?):
+If you look at the code, there is no loop for leftover i elements. Why? Think about it.
+If nums2 runs out first, where are the remaining nums1 elements? They are already sitting perfectly in the front of nums1! Moving them would just mean copying them to the exact same spots they are already in.
+
+Time Complexity: O(N+M), we traverse both the arrays exactly once.
+Space Complexity: O(1), constant extra space is used to store pointers.
+*/
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        // i points to last valid element in nums1
+        int i = m - 1;
+
+        // j points to last element in nums2
+        int j = n - 1;
+
+        // k is the last index of nums1 (including 0 placeholders)
+        int k = m + n - 1;
+
+        // Fill nums1 from the end by comparing nums1[i] and nums2[j]
+        while (i >= 0 && j >= 0) {
+            // Place larger of the two at nums1[k]
+            if (nums1[i] > nums2[j]) {
+                nums1[k--] = nums1[i--];
+            } else {
+                nums1[k--] = nums2[j--];
+            }
+        }
+
+        // If nums2 has remaining elements, copy them
+        while (j >= 0) {
+            nums1[k--] = nums2[j--];
+        }
+
+        // No need to copy remaining nums1 elements, as they are already in place
+    }
+};
